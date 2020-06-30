@@ -1,0 +1,39 @@
+{
+  "name": "charts.vue",
+  "version": "0.1.0-alpha",
+  "description": "Simple Vue wrapper for Chart.js",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib",
+  "scripts": {
+    "build": "tsc -p .",
+    "dev": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tritiumcl/charts.vue.git"
+  },
+  "keywords": [
+    "chart.js",
+    "vue",
+    "charts",
+    "wrapper"
+  ],
+  "author": "Franklin Rolando Orellana Pineda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tritiumcl/charts.vue/issues"
+  },
+  "homepage": "https://github.com/tritiumcl/charts.vue#readme",
+  "dependencies": {},
+  "peerDependencies": {
+    "@types/chart.js": "^2.9.22",
+    "chart.js": "^2.9.3",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@types/chart.js": "^2.9.22",
+    "chart.js": "^2.9.3",
+    "vue": "^2.6.11"
+  }
+}
