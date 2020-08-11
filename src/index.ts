@@ -1,88 +1,116 @@
-import Vue from "vue";
+//import 'chart.js/dist/Chart.bundle.js';
 import Chart from 'chart.js';
 
-export default Vue.extend({
-	props: {
-		type!: String,
-		labels: Array, // as ChartData["labels"],
-		datasets!: Array, //ChartData["datasets"] | ChartDataSets[];
-		chartData!: Object, //ChartData;
-		options!: Object, // as ChartOptions,
-		width!: String,
-		height!: String,
+interface data {
+	ctx : HTMLCanvasElement,
+	chart : Chart
+}
+
+const params = {
+	type!: String as unknown as string,
+	labels: Array as unknown as ChartData["labels"],
+	datasets!: Array as unknown as ChartData["datasets"] | ChartDataSets[],
+	chartData!: Object as unknown as ChartData,
+	options!: Object as ChartOptions,
+	width!: {
+		type: String,
+		default: '95%'
 	},
-	data: {
-		ctx: null as unknown as HTMLCanvasElement,
-		chart: null as unknown as Chart,
+	height!: {
+		type: String,
+		default: '400px'
+	},
+};
+
+interface methods {
+	update() : void;
+}
+
+//Only needed attributes to get type inference without importing vue
+interface vue {
+	$el: any;
+	$attrs : any;
+}
+
+declare type t = typeof params & data & methods & vue;
+
+export default {
+	props: params,
+	data() {
+		return {
+				ctx : null,
+				chart : null
+		}
 	},
 	watch: {
 		'chartData': {
 			deep: true,
 			handler() {
-				console.log('chartData changed', this.chartData);
-				this.chart.data = this.chartData;
-				this.update();
+				const _this = (this as unknown as t);
+				_this.chart.data = _this.chartData;
+				_this.update();
 			}
 		},
 		'type': {
 			handler() {
-				console.log('type changed', this.type);
-				this.chart.config.type = this.type;
-				this.update();
+				const _this = (this as unknown as t);
+				_this.chart.config.type = _this.type;
+				_this.update();
 			}
 		},
 		'labels': {
 			handler() {
-				console.log('labels changed', this.labels);
-				this.chart.data.labels = this.labels as ChartData["labels"];
-				this.update();
+				const _this = (this as unknown as t);
+				_this.chart.data.labels = _this.labels;
+				_this.update();
 			}
 		},
 		'datasets': {
 			deep: true,
 			handler() {
-				console.log('datasets changed', this.datasets);
-				this.chart.data.datasets = this.datasets as ChartData["datasets"];
-				this.update();
+				const _this = (this as unknown as t);
+				_this.chart.data.datasets = _this.datasets as ChartData["datasets"];
+				_this.update();
 			}
 		},
 		'options': {
 			deep: true,
 			handler() {
-				console.log('options changed', this.options);
-				this.chart.options = this.options;
-				this.update();
+				const _this = (this as unknown as t);
+				_this.chart.options = _this.options;
+				_this.update();
 			}
 		},
-		'width': { handler() { this.update() } },
-		'height': { handler() { this.update() } }
+		'width': { handler() { (this as unknown as t).update() } },
+		'height': { handler() { (this as unknown as t).update() } }
 	},
 	methods: {
 		update() {
-			this.chart.update();
+			(this as unknown as t).chart.update();
 		}
 	},
 	mounted: function () {
-		this.ctx = this.$el as HTMLCanvasElement;
-
-		console.log(this.ctx, this.type, this.chartData, this.options);
-
-
-		this.chart = new Chart(this.ctx, {
-			type: this.type,
-			data: this.labels ? { labels: this.labels, datasets: this.datasets } : this.chartData,
-			options: this.options
+		const _this = (this as unknown as t);
+		_this.ctx = _this.$el.childNodes[0] as HTMLCanvasElement;
+		
+		console.log(_this.ctx, _this.type, _this.chartData, _this.options);
+		_this.chart = new Chart(_this.ctx, {
+			type: _this.type,
+			data: _this.labels ? { labels: _this.labels, datasets: _this.datasets } : _this.chartData,
+			options: _this.options
 		});
 	},
 	render: function (h: Function) {
-		return h('canvas', {
-			attrs: {
-				width: this.width || '400',
-				height: this.height || '400'
-			}
-		});
+		if(typeof h != 'function') return console.error('createElement function not defined');
+		const _this = (this as unknown as t);
+		return h('div', {
+			style : {
+				width: _this.width,
+				height: _this.height
+			},
+		},[h('canvas')]);
 	}
-});
+};
 
 type cdatasets = Chart.ChartDataSets;
 

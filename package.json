@@ -1,6 +1,6 @@
 {
   "name": "charts.vue2",
-  "version": "0.1.0-alpha",
+  "version": "0.2.0-alpha",
   "description": "Simple Vue2 wrapper for Chart.js",
   "main": "lib/index.js",
   "module": "lib/index.js",
